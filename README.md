@@ -1,32 +1,24 @@
-# JAX-like random API for NumPy random number generators
+# Functional random number generation for NumPy
 
-Using a JAX-like interface to generate a random normal array:
+**Caveat emptor: this is only a proof of concept.**
+
+Provides a functional API for NumPy's random number generation that is
+compatible with [`jax.random`].
+
+This is a very simple toy implementation of the basic functionality. It is
+built around the standard [`numpy.random.Philox`] bit generator.
 
 ```py
->>> from numpy_random_api import random
+>>> from random_api_numpy import random
 >>> key = random.key(42)
 >>> key
-PRNGKeyArray([3444837047, 2669555309, 2046530742, 3581440988],
-             dtype=uint32, impl='philox')
+array([42,  0], dtype=uint64)
 >>> key, subkey = random.split(key)
 >>> key
-PRNGKeyArray([3973757322,  369700608,  604115056,  607984076],
-             dtype=uint32, impl='philox')
+array([15129985323320379406,  3490965594592278910], dtype=uint64)
 >>> random.normal(subkey, 4)
-array([-0.05883458,  0.6125753 , -1.29899843,  0.12702094])
+array([-0.91505197, -0.72636576, -1.64833621, -0.33304836])
 ```
 
-Equivalent code using NumPy's random interface:
-
-```py
->>> import numpy as np
->>> from numpy.random import Generator, Philox, SeedSequence
->>> key = SeedSequence(42).generate_state(4).view(np.uint32)
->>> key
-array([3444837047, 2669555309, 2046530742, 3581440988], dtype=uint32)
->>> key, subkey = Philox(key=key.view(np.uint64)).random_raw(4).reshape(2, 2).view(np.uint32)
->>> key
-array([3973757322,  369700608,  604115056,  607984076], dtype=uint32)
->>> Generator(Philox(key=subkey.view(np.uint64))).standard_normal(4)
-array([-0.05883458,  0.6125753 , -1.29899843,  0.12702094])
-```
+[`jax.random`]: https://jax.readthedocs.io/en/latest/jax.random.html
+[`numpy.random.Philox`]: https://numpy.org/doc/stable/reference/random/bit_generators/philox.html

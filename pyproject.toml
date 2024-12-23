@@ -1,0 +1,43 @@
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "random-api-numpy"
+description = "Functional random number generation for NumPy"
+readme = "README.md"
+license = "MIT"
+authors = [
+    {name = "Nicolas Tessore", email = "n.tessore@ucl.ac.uk"},
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+requires-python = ">=3.9"
+dynamic = ["version"]
+dependencies = [
+    "numpy",
+]
+
+[project.optional-dependencies]
+doc = [
+    "furo",
+    "sphinx",
+]
+test = [
+    "pytest",
+    "pytest-cov",
+]
+
+[project.urls]
+Repository = "https://github.com/glass-dev/random-api-numpy"
+Issues = "https://github.com/glass-dev/random-api-numpy/issues"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.pytest.ini_options]
+addopts = "--doctest-modules"
+doctest_optionflags = "ELLIPSIS NORMALIZE_WHITESPACE IGNORE_EXCEPTION_DETAIL"
